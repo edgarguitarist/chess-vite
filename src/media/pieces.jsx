@@ -1,4 +1,4 @@
-export const defaultPieces = {
+export const PIECES = {
   wP: (
     <svg
       xmlns="http://www.w3.org/2000/svg"
