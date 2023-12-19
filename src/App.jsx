@@ -1,14 +1,18 @@
 import Board from "./components/Board";
+import GameInfo from "./components/GameInfo";
 import Header from "./components/Header";
+import Principal from "./layouts/Principal";
 
 function App() {
-
+  
   return (
     <>
       <Header />
-      <section className="grid place-content-center h-[80vh]">
-        <Board /> 
-      </section>
+      <Principal>
+        <GameInfo />
+        <Board />
+        <div></div>
+      </Principal>
     </>
   );
 }
