@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.cols-board {
+    grid-template-columns: 24px repeat(8, 48px);
+}
