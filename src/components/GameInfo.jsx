@@ -7,7 +7,7 @@ export default function GameInfo() {
   console.log({ turn });
   return (
     <div className="grid grid-rows-3">
-      <div>Es el turno de los {turn}</div>
+      <div>Es el turno de las {turn}</div>
       <div>
         Fichas {TURNS.BLACK} derrotadas
         <div className="grid grid-cols-8">

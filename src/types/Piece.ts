@@ -1,6 +1,6 @@
 export enum TURNS {
-    WHITE = "BLANCO",
-    BLACK = "NEGRO",
+    WHITE = "BLANCAS",
+    BLACK = "NEGRAS",
 };
 
 export interface Piece {
