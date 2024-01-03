@@ -5,3 +5,7 @@
 .cols-board {
     grid-template-columns: 24px repeat(8, 48px);
 }
+
+.game-info {
+    grid-template-rows:max-content;
+}
