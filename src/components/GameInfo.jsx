@@ -1,28 +1,28 @@
 import { useBoardStore } from "../store/BoardStore";
 import { PIECES } from "../media/pieces";
 import { TURNS } from "../types/Piece";
+import DefeatedPieces from "./DefeatedPieces";
 
 export default function GameInfo() {
   const { turn, blackDefeatedPieces, whiteDefeatedPieces } = useBoardStore();
-  console.log({ turn });
+  const PIECE = turn === TURNS.WHITE ? PIECES["wK"] : PIECES["bK"];
+
   return (
-    <div className="grid grid-rows-3">
-      <div>Es el turno de las {turn}</div>
-      <div>
-        Fichas {TURNS.BLACK} derrotadas
-        <div className="grid grid-cols-8">
-          {blackDefeatedPieces.map((piece, index) => (
-            <div key={index}>{PIECES[piece.name]}</div>
-          ))}
-        </div>
+    <div className="grid game-info p-5">
+      <div className="border-2 rounded border-black mb-6">
+        <span className="text-2xl font-semibold flex items-center place-content-center my-2">
+          Es el turno de las {turn} {PIECE}
+        </span>
       </div>
-      <div>
-        Fichas {TURNS.WHITE} derrotadas
-        <div className="grid grid-cols-8">
-          {whiteDefeatedPieces.map((piece, index) => (
-            <div key={index}>{PIECES[piece.name]}</div>
-          ))}
-        </div>
+      <div className="grid grid-rows-2 gap-5">
+        <DefeatedPieces
+          color={TURNS.BLACK}
+          storedDefeatedPieces={blackDefeatedPieces}
+        ></DefeatedPieces>
+        <DefeatedPieces
+          color={TURNS.WHITE}
+          storedDefeatedPieces={whiteDefeatedPieces}
+        ></DefeatedPieces>
       </div>
     </div>
   );
