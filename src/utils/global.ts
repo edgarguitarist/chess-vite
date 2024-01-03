@@ -7,22 +7,23 @@ export function realCoords(coords: number[]) {
     return `${letters[x]}${numbers[y]}`;
 }
 
-export function getPieceName(piece: Piece) {
+export function getPieceName(piece: Piece, pronoun: boolean = false) {
     const { name } = piece;
     if (!name) return null;
-    const names = {
-        wR: "Torre",
-        wN: "Caballo",
-        wB: "Alfil",
-        wQ: "Reina",
-        wK: "Rey",
-        wP: "Peón",
-        bR: "Torre",
-        bN: "Caballo",
-        bB: "Alfil",
-        bQ: "Reina",
-        bK: "Rey",
-        bP: "Peón",
+    const pieces = {
+        wK: {name: "Rey", pronoun: "El"},
+        wQ: {name: "Reina", pronoun: "La"},
+        wB: {name: "Alfil", pronoun: "El"},
+        wN: {name: "Caballo", pronoun: "El"},
+        wR: {name: "Torre", pronoun: "La"},
+        wP: {name: "Peón", pronoun: "El"},
+        bK: {name: "Rey", pronoun: "El"},
+        bQ: {name: "Reina", pronoun: "La"},
+        bB: {name: "Alfil", pronoun: "El"},
+        bN: {name: "Caballo", pronoun: "El"},
+        bR: {name: "Torre", pronoun: "La"},
+        bP: {name: "Peón", pronoun: "El"},
     };
-    return names[name];
+    const pieza = pieces[name];
+    return pronoun ? [pieza.pronoun, pieza.name].join(" ") : pieza.name;
 }
