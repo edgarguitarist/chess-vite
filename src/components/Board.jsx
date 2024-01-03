@@ -1,10 +1,12 @@
 import { useBoardStore } from "../store/BoardStore";
 import Square from "./Square";
+import ScoreTimer from "./ScoreTimer";
 
 export default function Board() {
   const { board } = useBoardStore();
   return (
-    <section className="grid place-content-center h-[80vh]">
+    <section className="grid grid-board place-content-center p-5">
+      <ScoreTimer />
       <div className="border-2 border-black w-fit grid grid-rows-9 gap-0">
         {board.map((row, rowIndex) => {
           if (rowIndex === 0) {
@@ -16,7 +18,7 @@ export default function Board() {
                   }
                   return (
                     <div
-                      className="bg-gray-300 text-center"
+                      className="bg-gray-300 text-center font-semibold"
                       key={colIndex}
                     >{piece}</div>
                   );
@@ -30,7 +32,7 @@ export default function Board() {
                 if (colIndex === 0) {
                   return (
                     <div
-                      className="bg-gray-300 text-center w-full h-full grid  place-items-center"
+                      className="bg-gray-300 text-center w-full h-full grid  place-items-center font-semibold"
                       key={colIndex}
                     >{piece}</div>
                   )
@@ -46,6 +48,7 @@ export default function Board() {
           );
         })}
       </div>
+      <ScoreTimer />
     </section>
   );
 }
