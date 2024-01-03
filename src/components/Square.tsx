@@ -3,8 +3,10 @@ import { useBoardStore } from "../store/BoardStore";
 import { defaultSquare } from "../constants/global";
 import React from "react";
 import { Piece, TURNS } from "../types/Piece";
+import { toast } from "react-toastify";
+import { getPieceName } from "../utils/global";
 
-export default function Square({ piece }: { piece: Piece }) {
+export default function Square({ piece }: Readonly<{ piece: Piece }>) {
   const [row, col] = piece.coords;
   const {
     board,
@@ -21,35 +23,56 @@ export default function Square({ piece }: { piece: Piece }) {
 
   const isPiece = !!piece.name;
 
-  let hintLigths = "";
-  const defaultSize = "w-12 h-12";
+  const hintLigths =
+    piece.coords[0] === selectedSquare.coords[0] &&
+    piece.coords[1] === selectedSquare.coords[1]
+      ? "shadow-[inset_0px_1px_8px_4px_#4299e1]"
+      : "";
 
-  const currentPiece = piece ? PIECES[piece.name] : piece;
+  const defaultSize = "w-12 h-12";
+  const defaultHover = "hover:shadow-[inset_0px_1px_8px_4px_#4299e1]";
+  const defaultStyle = "cursor-pointer";
   const colorSquare = (row + col) % 2 === 0 ? "bg-white" : "bg-green-900";
 
-  const tryAttack = (square) => {
-    const { color } = square;
+  const currentPiece = piece ? PIECES[piece.name] : piece;
+
+  const tryAttack = () => {
+    //TODO: Agregar tiempo en el que la ficha fue derrotada.
+    const { color } = piece;
     if (color === TURNS.WHITE) {
-      setBlackDefeatedPieces([square, ...blackDefeatedPieces]);
+      setWhiteDefeatedPieces([piece, ...whiteDefeatedPieces]);
+    } else if (color === TURNS.BLACK) {
+      setBlackDefeatedPieces([piece, ...blackDefeatedPieces]);
+    } else {
+      return;
     }
-    if (color === TURNS.BLACK) {
-      setWhiteDefeatedPieces([square, ...whiteDefeatedPieces]);
-    }
+    toast.success(
+      [
+        "+6 PUNTOS - La pieza",
+        getPieceName(piece),
+        "de las",
+        color,
+        "ha sido derrotada ⚔️",
+      ].join(" ")
+    );
   };
 
   const movePiece = () => {
     if (!selectedSquare?.name) return;
-    if (selectedSquare?.color !== turn) return;
+    if (selectedSquare?.color !== turn) {
+      toast.error(["Es el turno de las", turn, "✖️"].join(" "));
+      return;
+    }
     if (row < 1 || row > 8 || col < 1 || col > 8) return;
     if (piece?.color === turn && piece?.color !== undefined) return;
     let newBoard = [...board];
     newBoard[selectedSquare.coords[0]][selectedSquare.coords[1]] =
       defaultSquare;
-    tryAttack(piece);
-
+    tryAttack();
     newBoard[row][col] = selectedSquare;
     setBoard(newBoard);
     setSelectedSquare(defaultSquare);
+    toast.success("+3 PUNTOS - Movimiento Valido ✅");
     changeTurn();
     return true;
   };
@@ -69,7 +92,13 @@ export default function Square({ piece }: { piece: Piece }) {
 
   return (
     <div
-      className={[colorSquare, hintLigths, defaultSize].join(" ")}
+      className={[
+        defaultStyle,
+        colorSquare,
+        hintLigths,
+        defaultSize,
+        defaultHover,
+      ].join(" ")}
       onClick={() => handleClick()}
     >
       {currentPiece}
