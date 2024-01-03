@@ -1,15 +1,13 @@
 import Board from "./components/Board";
 import GameInfo from "./components/GameInfo";
 import Header from "./components/Header";
+import PiecesInfo from "./components/PiecesInfo";
 import Principal from "./layouts/Principal";
-import { useBoardStore } from "./store/BoardStore";
 import React from "react";
-import { Piece } from "./types/Piece";
-import { PIECES } from "./media/pieces";
-import { realCoords, getPieceName } from "./utils/global";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  const { selectedSquare }: { selectedSquare: Piece } = useBoardStore();
 
   return (
     <>
@@ -17,26 +15,9 @@ function App() {
       <Principal>
         <GameInfo />
         <Board />
-        <div>
-          <div className="w-full flex items-end gap-4">
-            Pieza seleccionada:{" "}
-            {!selectedSquare.name ? "N/A" : PIECES[selectedSquare.name]}
-          </div>
-          <div className="w-full flex items-center gap-4">
-            Nombre:{" "}
-            {!selectedSquare.name ? "N/A" : getPieceName(selectedSquare)}
-          </div>
-          <div className="w-full flex items-center gap-4">
-            Color: {!selectedSquare.color ? "N/A" : selectedSquare.color}
-          </div>
-          <div className="w-full flex items-center gap-4">
-            Coordenadas:{" "}
-            {selectedSquare.coords[0] === 0
-              ? "N/A"
-              : realCoords(selectedSquare.coords)}
-          </div>
-        </div>
+        <PiecesInfo />
       </Principal>
+      <ToastContainer />
     </>
   );
 }
