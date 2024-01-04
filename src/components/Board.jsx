@@ -5,7 +5,7 @@ import ScoreTimer from "./ScoreTimer";
 export default function Board() {
   const { board } = useBoardStore();
   return (
-    <section className="grid grid-board place-content-center p-5">
+    <section className="grid place-content-center">
       <ScoreTimer />
       <div className="border-2 border-black w-fit grid grid-rows-9 gap-0">
         {board.map((row, rowIndex) => {
