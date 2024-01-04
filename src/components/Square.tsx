@@ -72,7 +72,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     newBoard[row][col] = selectedSquare;
     setBoard(newBoard);
     setSelectedSquare(defaultSquare);
-    toast.success("+3 PUNTOS - Movimiento Valido ✅");
+    toast.success("+3 PUNTOS - Movimiento Valido de las " + turn + " ✔️");
     changeTurn();
     return true;
   };
