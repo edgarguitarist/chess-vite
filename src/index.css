@@ -3,9 +3,13 @@
 @tailwind utilities;
 
 .cols-board {
-    grid-template-columns: 24px repeat(8, 48px);
+  grid-template-columns: 24px repeat(8, 48px);
 }
 
-.game-info {
-    grid-template-rows:max-content;
+.grid-max-content {
+  grid-template-rows: max-content;
+}
+
+.grid-piece-info {
+  grid-template-columns: 73% 27%;
 }

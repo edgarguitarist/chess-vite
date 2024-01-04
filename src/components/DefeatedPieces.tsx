@@ -9,11 +9,14 @@ export default function DefeatedPieces({
   storedDefeatedPieces: Piece[];
   color: TURNS;
 }>) {
-
   return (
-    <div className="p-5 border-2 rounded border-black ">
-      <span className="text-2xl block text-center font-semibold">Piezas {color} derrotadas</span>
-      <div className="grid grid-cols-8 pt-5">
+    <div className="border-2 rounded border-black ">
+      <div>
+        <span className="text-2xl p-2 block text-center font-semibold bg-slate-800 text-white">
+          Piezas {color} derrotadas
+        </span>
+      </div>
+      <div className="grid grid-cols-8 py-4 px-3 place-items-center">
         {storedDefeatedPieces.map((piece, index) => (
           <div key={index}>{PIECES[piece.name]}</div>
         ))}
