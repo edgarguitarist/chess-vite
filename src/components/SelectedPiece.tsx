@@ -1,37 +1,40 @@
 import React from "react";
 import { PIECES } from "../media/pieces";
 import { realCoords, getPieceName } from "../utils/global";
-import { useBoardStore } from "../store/BoardStore";
+import { useGameStore } from "../store/GameStore";
 import { Piece } from "../types/Piece";
 
 export default function SelectedPiece() {
-  const { selectedSquare } = useBoardStore() as { selectedSquare: Piece };
+  const { selectedSquare, hoverSquare } = useGameStore() as { selectedSquare: Piece, hoverSquare: Piece };
+
+  const hoveredSquare = !!hoverSquare?.name;
+  const pieceShown = hoveredSquare ? hoverSquare : selectedSquare;
 
   return (
     <div className="text-xl font-semibold border-2 rounded border-black">
       <div>
         <span className="text-2xl p-2 block text-center font-semibold bg-slate-800 text-white">
-          Pieza seleccionada
+          Pieza {hoveredSquare ? "en hover" : "Seleccionada"}
         </span>
       </div>
       <div className="py-2 px-5 grid grid-piece-info">
         <div>
           <div className="w-full flex items-center gap-4">
             Nombre:{" "}
-            {!selectedSquare.name ? "N/A" : getPieceName(selectedSquare)}
+            {!pieceShown.name ? "N/A" : getPieceName(pieceShown)}
           </div>
           <div className="w-full flex items-center gap-4">
-            Color: {!selectedSquare.color ? "N/A" : selectedSquare.color}
+            Color: {!pieceShown.color ? "N/A" : pieceShown.color}
           </div>
           <div className="w-full flex items-center gap-4">
             Coordenadas:{" "}
-            {selectedSquare.coords[0] === 0
+            {pieceShown.coords[0] === 0
               ? "N/A"
-              : realCoords(selectedSquare.coords)}
+              : realCoords(pieceShown.coords)}
           </div>
         </div>
-        <div className="grid place-items-center scale-110">
-          {!selectedSquare.name ? "N/A" : PIECES[selectedSquare.name]}
+        <div className="grid place-items-center scale-[1.75]">
+          {!pieceShown.name ? "N/A" : PIECES[pieceShown.name]}
         </div>
       </div>
     </div>
