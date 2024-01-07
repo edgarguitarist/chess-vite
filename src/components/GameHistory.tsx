@@ -1,26 +1,17 @@
 import React from "react";
+import { useGameStore } from "../store/GameStore";
 
 export default function GameHistory() {
+  const {history} = useGameStore() as any;
   return (
     <div className="text-2xl font-semibold border-2 rounded border-black overflow-y-scroll h-[70vh]">
-      <ul className="w-full text-sm font-medium border border-gray-400">
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-400">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-200">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-400">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-200">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-400">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-200">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-400">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-200">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-400">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-200">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-400">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-200">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-400">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-200">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-400">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 border-b border-gray-500 bg-gray-200">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
-        <li className="w-full px-4 py-2 bg-gray-400">PIEZA X SE MOVIO DE A1 A B2 - 09:56</li>
+      <ul className="w-full text-sm font-medium ">
+        {
+          history.map((item: any, index: number) => {
+            const bgColor = index % 2 === 0 ? "bg-gray-200" : "bg-gray-400";
+            return <li key={index} className={["w-full px-4 py-2", bgColor].join(" ")}>{(history?.length - index) + ".- " + item}</li>
+          })
+        }
       </ul>
     </div>
   );
