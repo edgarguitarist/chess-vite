@@ -1,26 +1,27 @@
-import { TURNS, Piece } from "../types/Piece"
+import { PLAYERS, Piece } from "../types/Piece"
 
-const createDefaultPiece = (color, name):Piece => {
+const createDefaultPiece = (color, name): Piece => {
   return {
     name,
     color,
     coords: [9, 9],
     moveSet: null,
+    isMoved: false,
   }
 }
-const bR = createDefaultPiece(TURNS.BLACK, "bR")
-const bN = createDefaultPiece(TURNS.BLACK, "bN")
-const bB = createDefaultPiece(TURNS.BLACK, "bB")
-const bQ = createDefaultPiece(TURNS.BLACK, "bQ")
-const bK = createDefaultPiece(TURNS.BLACK, "bK")
-const bP = createDefaultPiece(TURNS.BLACK, "bP")
+const bR = createDefaultPiece(PLAYERS.BLACK, "bR")
+const bN = createDefaultPiece(PLAYERS.BLACK, "bN")
+const bB = createDefaultPiece(PLAYERS.BLACK, "bB")
+const bQ = createDefaultPiece(PLAYERS.BLACK, "bQ")
+const bK = createDefaultPiece(PLAYERS.BLACK, "bK")
+const bP = createDefaultPiece(PLAYERS.BLACK, "bP")
 
-const wR = createDefaultPiece(TURNS.WHITE, "wR")
-const wN = createDefaultPiece(TURNS.WHITE, "wN")
-const wB = createDefaultPiece(TURNS.WHITE, "wB")
-const wQ = createDefaultPiece(TURNS.WHITE, "wQ")
-const wK = createDefaultPiece(TURNS.WHITE, "wK")
-const wP = createDefaultPiece(TURNS.WHITE, "wP")
+const wR = createDefaultPiece(PLAYERS.WHITE, "wR")
+const wN = createDefaultPiece(PLAYERS.WHITE, "wN")
+const wB = createDefaultPiece(PLAYERS.WHITE, "wB")
+const wQ = createDefaultPiece(PLAYERS.WHITE, "wQ")
+const wK = createDefaultPiece(PLAYERS.WHITE, "wK")
+const wP = createDefaultPiece(PLAYERS.WHITE, "wP")
 
 export const defaultBoard = [
   [0, "A", "B", "C", "D", "E", "F", "G", "H"],
@@ -39,4 +40,5 @@ export const defaultSquare: Piece = {
   color: null,
   coords: [0, 0],
   moveSet: null,
+  isMoved: false,
 }

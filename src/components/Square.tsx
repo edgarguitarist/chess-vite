@@ -2,7 +2,7 @@ import { PIECES } from "../media/pieces";
 import { useGameStore } from "../store/GameStore";
 import { defaultSquare } from "../constants/global";
 import React from "react";
-import { Piece, TURNS } from "../types/Piece";
+import { Piece, PLAYERS } from "../types/Piece";
 import { toast } from "react-toastify";
 import { getPieceName, realCoords } from "../utils/global";
 
@@ -11,7 +11,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
   const {
     board,
     setBoard,
-    selectedSquare,
+    selectedSquare ,
     setSelectedSquare,
     setHoverSquare,
     turn,
@@ -23,7 +23,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
 
   const isPiece = !!piece.name;
 
-  const hintLigths =
+  const hintLights =
     piece.coords[0] === selectedSquare.coords[0] &&
     piece.coords[1] === selectedSquare.coords[1]
       ? "shadow-[inset_0px_1px_8px_4px_#4299e1]"
@@ -39,10 +39,10 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
   const tryAttack = () => {
     //TODO: Agregar tiempo en el que la ficha fue derrotada.
     const { color } = piece;
-    if (color === TURNS.WHITE) {
-      setDefeatedPieces(TURNS.WHITE, piece);
-    } else if (color === TURNS.BLACK) {
-      setDefeatedPieces(TURNS.BLACK, piece);
+    if (color === PLAYERS.WHITE) {
+      setDefeatedPieces(PLAYERS.WHITE, piece);
+    } else if (color === PLAYERS.BLACK) {
+      setDefeatedPieces(PLAYERS.BLACK, piece);
     } else {
       return;
     }
@@ -70,6 +70,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     newBoard[selectedSquare.coords[0]][selectedSquare.coords[1]] =
       defaultSquare;
     tryAttack();
+    selectedSquare.isMoved = true;
     newBoard[row][col] = selectedSquare;
     setBoard(newBoard);
     setSelectedSquare(defaultSquare);
@@ -90,6 +91,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
 
   const handleClick = () => {
     if (!isPiece && !selectedSquare.isSelected) return;
+    delete piece.isSelected;
     if (movePiece()) return;
 
     const currentSquare = {
@@ -116,7 +118,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
       className={[
         defaultStyle,
         colorSquare,
-        hintLigths,
+        hintLights,
         defaultSize,
         defaultHover,
       ].join(" ")}

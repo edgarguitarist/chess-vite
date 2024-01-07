@@ -1,13 +1,13 @@
 import { useGameStore } from "../store/GameStore";
 import Square from "./Square";
 import ScoreTimer from "./ScoreTimer";
-import { TURNS } from "../types/Piece";
+import { PLAYERS } from "../types/Piece";
 
 export default function Board() {
   const { board } = useGameStore();
   return (
     <section className="grid place-content-center">
-      <ScoreTimer color={TURNS.BLACK} />
+      <ScoreTimer color={PLAYERS.BLACK} />
       <div className="border-2 border-black w-fit grid grid-rows-9 gap-0">
         {board.map((row, rowIndex) => {
           if (rowIndex === 0) {
@@ -53,7 +53,7 @@ export default function Board() {
           );
         })}
       </div>
-      <ScoreTimer color={TURNS.WHITE} />
+      <ScoreTimer color={PLAYERS.WHITE} />
     </section>
   );
 }

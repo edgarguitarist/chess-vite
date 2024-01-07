@@ -1,5 +1,5 @@
 import React from "react";
-import { Piece, TURNS } from "../types/Piece";
+import { Piece, PLAYERS } from "../types/Piece";
 import { PIECES } from "../media/pieces";
 
 export default function DefeatedPieces({
@@ -7,7 +7,7 @@ export default function DefeatedPieces({
   color,
 }: Readonly<{
   storedDefeatedPieces: Piece[];
-  color: TURNS;
+  color: PLAYERS;
 }>) {
   return (
     <div className="border-2 rounded border-black ">

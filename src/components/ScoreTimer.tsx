@@ -1,8 +1,8 @@
 import React from "react";
 import { useGameStore } from "../store/GameStore";
-import { TURNS } from "../types/Piece";
+import { PLAYERS } from "../types/Piece";
 
-export default function ScoreTimer({ color }: Readonly<{ color: TURNS }>) {
+export default function ScoreTimer({ color }: Readonly<{ color: PLAYERS }>) {
   const { getScore  } = useGameStore() as any;
   const PlayerScore = getScore(color);
   return (

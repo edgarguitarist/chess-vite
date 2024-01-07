@@ -1,11 +1,11 @@
 import { useGameStore } from "../store/GameStore";
 import { PIECES } from "../media/pieces";
-import { TURNS } from "../types/Piece";
+import { PLAYERS } from "../types/Piece";
 import GameHistory from "./GameHistory";
 
 export default function GameInfo() {
   const { turn } = useGameStore();
-  const PIECE = turn === TURNS.WHITE ? PIECES["wK"] : PIECES["bK"];
+  const PIECE = turn === PLAYERS.WHITE ? PIECES["wK"] : PIECES["bK"];
 
   return (
     <div className="grid grid-max-content p-5">

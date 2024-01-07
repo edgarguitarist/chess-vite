@@ -1,4 +1,4 @@
-import { Piece, TURNS } from "./Piece";
+import { Piece, PLAYERS } from "./Piece";
 
 export interface Player {
     score: number,
@@ -8,19 +8,19 @@ export interface Player {
 
 export interface InitialState {
     board: any[][],
-    [TURNS.WHITE]: Player,
-    [TURNS.BLACK]: Player,
+    [PLAYERS.WHITE]: Player,
+    [PLAYERS.BLACK]: Player,
     selectedSquare: Piece | null,
     hoverSquare: Piece | null,
-    turn: TURNS,
+    turn: PLAYERS,
     history: any[],
 }
 
 export interface GameStore extends InitialState {
     setBoard: (board: any[][]) => void,
-    setDefeatedPieces: (color: TURNS, newDefeatedPieces: Piece) => void,
-    setScore: (color: TURNS, points: number) => void,
-    getScore: (color: TURNS) => number,
+    setDefeatedPieces: (color: PLAYERS, newDefeatedPieces: Piece) => void,
+    setScore: (color: PLAYERS, points: number) => void,
+    getScore: (color: PLAYERS) => number,
     setSelectedSquare: (selectedSquare: Piece | null) => void,
     setHoverSquare: (hoverSquare: Piece | null) => void,
     changeTurn: () => void,
