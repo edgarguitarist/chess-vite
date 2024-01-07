@@ -1,10 +1,10 @@
-import { useBoardStore } from "../store/BoardStore";
+import { useGameStore } from "../store/GameStore";
 import { PIECES } from "../media/pieces";
 import { TURNS } from "../types/Piece";
 import GameHistory from "./GameHistory";
 
 export default function GameInfo() {
-  const { turn } = useBoardStore();
+  const { turn } = useGameStore();
   const PIECE = turn === TURNS.WHITE ? PIECES["wK"] : PIECES["bK"];
 
   return (

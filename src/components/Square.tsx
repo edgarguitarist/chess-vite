@@ -1,10 +1,10 @@
 import { PIECES } from "../media/pieces";
-import { useBoardStore } from "../store/BoardStore";
+import { useGameStore } from "../store/GameStore";
 import { defaultSquare } from "../constants/global";
 import React from "react";
 import { Piece, TURNS } from "../types/Piece";
 import { toast } from "react-toastify";
-import { getPieceName } from "../utils/global";
+import { getPieceName, realCoords } from "../utils/global";
 
 export default function Square({ piece }: Readonly<{ piece: Piece }>) {
   const [row, col] = piece.coords;
@@ -13,13 +13,13 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     setBoard,
     selectedSquare,
     setSelectedSquare,
+    setHoverSquare,
     turn,
     changeTurn,
-    whiteDefeatedPieces,
-    setWhiteDefeatedPieces,
-    blackDefeatedPieces,
-    setBlackDefeatedPieces,
-  }: any = useBoardStore();
+    setDefeatedPieces,
+    setScore,
+    setHistory,
+  }: any = useGameStore();
 
   const isPiece = !!piece.name;
 
@@ -40,9 +40,9 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     //TODO: Agregar tiempo en el que la ficha fue derrotada.
     const { color } = piece;
     if (color === TURNS.WHITE) {
-      setWhiteDefeatedPieces([piece, ...whiteDefeatedPieces]);
+      setDefeatedPieces(TURNS.WHITE, piece);
     } else if (color === TURNS.BLACK) {
-      setBlackDefeatedPieces([piece, ...blackDefeatedPieces]);
+      setDefeatedPieces(TURNS.BLACK, piece);
     } else {
       return;
     }
@@ -55,6 +55,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
         "ha sido derrotada ⚔️",
       ].join(" ")
     );
+    setScore(selectedSquare?.color, 6);
   };
 
   const movePiece = () => {
@@ -73,13 +74,22 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     setBoard(newBoard);
     setSelectedSquare(defaultSquare);
     toast.success("+3 PUNTOS - Movimiento Valido de las " + turn + " ✔️");
+    setScore(selectedSquare.color, 3);
+    const moveHistoryMessage = [
+      "La pieza",
+      getPieceName(selectedSquare),
+      "de las",
+      selectedSquare.color,
+      "se movio a",
+      realCoords([row, col]),
+    ].join(" ");
+    setHistory(moveHistoryMessage);
     changeTurn();
     return true;
   };
 
   const handleClick = () => {
     if (!isPiece && !selectedSquare.isSelected) return;
-
     if (movePiece()) return;
 
     const currentSquare = {
@@ -88,6 +98,17 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     };
 
     setSelectedSquare(isPiece ? currentSquare : defaultSquare);
+  };
+
+  const handleHover = () => {
+    if (!isPiece) {
+      setHoverSquare(null);
+      return;
+    }
+    const currentSquare = {
+      ...piece,
+    };
+    setHoverSquare(currentSquare);
   };
 
   return (
@@ -100,6 +121,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
         defaultHover,
       ].join(" ")}
       onClick={() => handleClick()}
+      onMouseOver={() => handleHover()}
     >
       {currentPiece}
     </div>
