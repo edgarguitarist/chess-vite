@@ -9,7 +9,7 @@ export default function PiecesInfo() {
   return (
     <div className="grid grid-rows-2 gap-5 grid-max-content p-5 ">
       <SelectedPiece />
-      <div className="grid grid-rows-2 gap-5">
+      <div className="grid grid-min-content gap-5">
         <DefeatedPieces
           color={PLAYERS.BLACK}
           storedDefeatedPieces={black.defeatedPieces}

@@ -124,6 +124,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
       ].join(" ")}
       onClick={() => handleClick()}
       onMouseOver={() => handleHover()}
+      onMouseOut={() => setHoverSquare(null)}
     >
       {currentPiece}
     </div>

@@ -16,10 +16,16 @@ export default function DefeatedPieces({
           Piezas {color} derrotadas
         </span>
       </div>
-      <div className="grid grid-cols-8 py-4 px-3 place-items-center">
-        {storedDefeatedPieces.map((piece, index) => (
-          <div key={index}>{PIECES[piece.name]}</div>
-        ))}
+      <div className="grid grid-cols-8 py-4 px-3 place-items-center gap-2">
+        {!storedDefeatedPieces.length && (
+          <div className="col-span-8 text-center font-semibold text-lg mt-8">
+            No hay piezas {color} derrotadas.
+          </div>
+        )}
+        {storedDefeatedPieces.length > 0 &&
+          storedDefeatedPieces.map((piece, index) => (
+            <div className="scale-[1.15]" key={index}>{PIECES[piece.name]}</div>
+          ))}
       </div>
     </div>
   );
