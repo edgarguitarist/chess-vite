@@ -1,12 +1,13 @@
-import { useBoardStore } from "../store/BoardStore";
+import { useGameStore } from "../store/GameStore";
 import Square from "./Square";
 import ScoreTimer from "./ScoreTimer";
+import { TURNS } from "../types/Piece";
 
 export default function Board() {
-  const { board } = useBoardStore();
+  const { board } = useGameStore();
   return (
     <section className="grid place-content-center">
-      <ScoreTimer />
+      <ScoreTimer color={TURNS.BLACK} />
       <div className="border-2 border-black w-fit grid grid-rows-9 gap-0">
         {board.map((row, rowIndex) => {
           if (rowIndex === 0) {
@@ -20,7 +21,9 @@ export default function Board() {
                     <div
                       className="bg-gray-300 text-center font-semibold"
                       key={colIndex}
-                    >{piece}</div>
+                    >
+                      {piece}
+                    </div>
                   );
                 })}
               </div>
@@ -34,8 +37,10 @@ export default function Board() {
                     <div
                       className="bg-gray-300 text-center w-full h-full grid  place-items-center font-semibold"
                       key={colIndex}
-                    >{piece}</div>
-                  )
+                    >
+                      {piece}
+                    </div>
+                  );
                 }
                 return (
                   <Square
@@ -48,7 +53,7 @@ export default function Board() {
           );
         })}
       </div>
-      <ScoreTimer />
+      <ScoreTimer color={TURNS.WHITE} />
     </section>
   );
 }
