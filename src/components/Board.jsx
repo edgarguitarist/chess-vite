@@ -6,7 +6,7 @@ import { PLAYERS } from "../types/Piece";
 export default function Board() {
   const { board } = useGameStore();
   return (
-    <section className="grid place-content-center">
+    <section className="flex flex-col justify-between my-2 items-center">
       <ScoreTimer color={PLAYERS.BLACK} />
       <div className="border-2 border-black w-fit grid grid-rows-9 gap-0">
         {board.map((row, rowIndex) => {
