@@ -1,1 +1,5 @@
-TODO: Considerar en un futuro hacer un onMouseOver para mostrar la información de la pieza que se tiene bajo el cursor, para asi saber la información ya existente de la pieza y cuales son las posibles jugadas que se pueden realizar con ella.
+TODO: Considerar en un futuro hacer un onMouseOver para mostrar la información de la pieza que se tiene bajo el cursor, para asi saber cuales son las posibles jugadas que se pueden realizar con ella.
+
+TODO: Agregar Tooltip para mostrar la informacion de las piezas derrotadas, osea en que momento fue derrotada.
+
+TODO: Agregar comentarios random al historial de movimientos al inicio del mensaje, por ejemplo "WOW, que buen movimiento", "Que mal movimiento", "Que jugada tan mala", "Que jugada tan buena", "Que jugada tan extraña", "Que jugada tan rara", "Que jugada tan inesperada", "Que jugada tan predecible", "Que jugada tan obvia", "Que jugada tan inusual", "Que jugada tan comun", "Que jugada tan poco comun", "Que jugada tan poco usual", "Que jugada tan poco comun"
