@@ -39,6 +39,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
   const tryAttack = () => {
     //TODO: Agregar tiempo en el que la ficha fue derrotada.
     const { color } = piece;
+    piece.defeatedAtTime = 15;
     if (color === PLAYERS.WHITE) {
       setDefeatedPieces(PLAYERS.WHITE, piece);
     } else if (color === PLAYERS.BLACK) {

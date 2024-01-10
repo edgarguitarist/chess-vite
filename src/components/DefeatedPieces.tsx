@@ -1,6 +1,8 @@
 import React from "react";
 import { Piece, PLAYERS } from "../types/Piece";
 import { PIECES } from "../media/pieces";
+import { Tooltip } from "react-tooltip";
+import { getPieceName } from "../utils/global";
 
 export default function DefeatedPieces({
   storedDefeatedPieces,
@@ -23,9 +25,27 @@ export default function DefeatedPieces({
           </div>
         )}
         {storedDefeatedPieces.length > 0 &&
-          storedDefeatedPieces.map((piece, index) => (
-            <div className="scale-[1.15]" key={index}>{PIECES[piece.name]}</div>
-          ))}
+          storedDefeatedPieces.map((piece, index) => {
+            const keyName = `${piece.name}-${index}`;
+            return (
+              <>
+                <div className="scale-[1.15]" key={keyName} id={keyName}>
+                  {PIECES[piece.name]}
+                </div>
+                <Tooltip anchorSelect={"#" + keyName} place="top">
+                  <div className="w-full flex items-center gap-4">
+                    Nombre: {getPieceName(piece)}
+                  </div>
+                  <div className="w-full flex items-center gap-4">
+                    Color: {piece.color}
+                  </div>
+                  <div className="">
+                    Momento de Captura: {piece.defeatedAtTime}
+                  </div>
+                </Tooltip>
+              </>
+            );
+          })}
       </div>
     </div>
   );
