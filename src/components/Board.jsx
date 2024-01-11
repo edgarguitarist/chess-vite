@@ -8,7 +8,7 @@ export default function Board() {
   return (
     <section className="flex flex-col justify-between my-2 items-center">
       <ScoreTimer color={PLAYERS.BLACK} />
-      <div className="border-2 border-black w-fit grid grid-rows-9 gap-0">
+      <div className="border-2 border-black w-fit grid rows-board gap-0">
         {board.map((row, rowIndex) => {
           if (rowIndex === 0) {
             return (

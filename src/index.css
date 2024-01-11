@@ -7,6 +7,10 @@
 .cols-board {
   grid-template-columns: 24px repeat(8, 48px);
 }
+.rows-board {
+  grid-template-rows: 24px repeat(8, 48px);
+}
+
 
 .grid-max-content {
   grid-template-rows: max-content;
