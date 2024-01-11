@@ -10,5 +10,5 @@ export interface Piece {
     moveSet: any;
     isMoved: boolean;
     isSelected?: boolean;
-    defeatedAtTime?: number;
+    defeatedAtTime: number;
 }

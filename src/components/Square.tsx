@@ -5,20 +5,23 @@ import React from "react";
 import { Piece, PLAYERS } from "../types/Piece";
 import { toast } from "react-toastify";
 import { getPieceName, realCoords } from "../utils/global";
+import { STATES_GAME } from "../types/global";
 
 export default function Square({ piece }: Readonly<{ piece: Piece }>) {
   const [row, col] = piece.coords;
   const {
     board,
     setBoard,
-    selectedSquare ,
+    selectedSquare,
     setSelectedSquare,
     setHoverSquare,
     turn,
     changeTurn,
     setDefeatedPieces,
     setScore,
+    getTime,
     setHistory,
+    stateGame,
   }: any = useGameStore();
 
   const isPiece = !!piece.name;
@@ -39,7 +42,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
   const tryAttack = () => {
     //TODO: Agregar tiempo en el que la ficha fue derrotada.
     const { color } = piece;
-    piece.defeatedAtTime = 15;
+    piece.defeatedAtTime = color ? getTime(color) : 0;
     if (color === PLAYERS.WHITE) {
       setDefeatedPieces(PLAYERS.WHITE, piece);
     } else if (color === PLAYERS.BLACK) {
@@ -91,6 +94,10 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
   };
 
   const handleClick = () => {
+    if (stateGame !== STATES_GAME.PLAYING) {
+      toast.error("El juego no ha iniciado");
+      return;
+    }
     if (!isPiece && !selectedSquare.isSelected) return;
     delete piece.isSelected;
     if (movePiece()) return;

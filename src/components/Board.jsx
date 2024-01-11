@@ -7,7 +7,7 @@ export default function Board() {
   const { board } = useGameStore();
   return (
     <section className="flex flex-col justify-between my-2 items-center">
-      <ScoreTimer color={PLAYERS.BLACK} />
+      <ScoreTimer color={PLAYERS.BLACK}  />
       <div className="border-2 border-black w-fit grid rows-board gap-0">
         {board.map((row, rowIndex) => {
           if (rowIndex === 0) {
@@ -53,7 +53,7 @@ export default function Board() {
           );
         })}
       </div>
-      <ScoreTimer color={PLAYERS.WHITE} />
+      <ScoreTimer color={PLAYERS.WHITE} expiryTimestamp={10} />
     </section>
   );
 }

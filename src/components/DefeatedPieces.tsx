@@ -2,7 +2,7 @@ import React from "react";
 import { Piece, PLAYERS } from "../types/Piece";
 import { PIECES } from "../media/pieces";
 import { Tooltip } from "react-tooltip";
-import { getPieceName } from "../utils/global";
+import { getPieceName, getTimeString } from "../utils/global";
 
 export default function DefeatedPieces({
   storedDefeatedPieces,
@@ -40,7 +40,7 @@ export default function DefeatedPieces({
                     Color: {piece.color}
                   </div>
                   <div className="">
-                    Momento de Captura: {piece.defeatedAtTime}
+                    Momento de Captura: {getTimeString(piece.defeatedAtTime)}
                   </div>
                 </Tooltip>
               </>

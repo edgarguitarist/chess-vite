@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { defaultBoard, defaultSquare } from "../constants/global";
 import { PLAYERS } from "../types/Piece";
-import { GameStore, InitialState } from "../types/global";
+import { GameStore, InitialState, STATES_GAME } from "../types/global";
 
 const initialState: InitialState = {
     board: defaultBoard,
@@ -19,17 +19,26 @@ const initialState: InitialState = {
     hoverSquare: defaultSquare,
     turn: PLAYERS.WHITE,
     history: [],
+    stateGame: STATES_GAME.WAITING,
 };
 
 export const useGameStore = create<GameStore>((set, get) => ({
     ...initialState,
     setBoard: (board) => set({ board }),
+    setStateGame: (stateGame) => set({ stateGame }),
     setDefeatedPieces: (color, newDefeatedPiece) => set((state) => ({
         [color]: {
             ...state[color],
             defeatedPieces: [...get()[color].defeatedPieces, newDefeatedPiece],
         },
     })),
+    setTime: (color, time) => set((state) => ({
+        [color]: {
+            ...state[color],
+            time,
+        },
+    })),
+    getTime: (color) => get()[color].time,
     setScore: (color, points) => set((state) => ({
         [color]: {
             ...state[color],

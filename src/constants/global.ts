@@ -7,6 +7,7 @@ const createDefaultPiece = (color, name): Piece => {
     coords: [9, 9],
     moveSet: null,
     isMoved: false,
+    defeatedAtTime: 0
   }
 }
 const bR = createDefaultPiece(PLAYERS.BLACK, "bR")
@@ -41,4 +42,5 @@ export const defaultSquare: Piece = {
   coords: [0, 0],
   moveSet: null,
   isMoved: false,
+  defeatedAtTime: 0
 }
