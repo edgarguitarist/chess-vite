@@ -7,26 +7,20 @@ import { STATES_GAME } from "../types/global";
 import { toast } from "react-toastify";
 
 export default function ScoreTimer({ color }: Readonly<{ color: PLAYERS }>) {
-  const { getScore, setTime, turn, stateGame, setStateGame } = useGameStore() as any;
+  const { getScore, setTime, turn, stateGame, setStateGame } =
+    useGameStore() as any;
   const PlayerScore = getScore(color);
   const time = new Date();
   time.setSeconds(time.getSeconds() + 600); //600//10 minutes timer
-  const {
-    totalSeconds,
-    seconds,
-    minutes,
-    start,
-    pause,
-    resume,
-    isRunning,
-  } = useTimer({
-    expiryTimestamp: time,
-    onExpire: () => {
-      celebrate();
-      console.info("Tiempo Terminado");
-    },
-    autoStart: false,
-  });
+  const { totalSeconds, seconds, minutes, start, pause, resume, isRunning } =
+    useTimer({
+      expiryTimestamp: time,
+      onExpire: () => {
+        celebrate();
+        console.info("Tiempo Terminado");
+      },
+      autoStart: false,
+    });
 
   useEffect(() => {
     setTime(color, totalSeconds);
@@ -47,14 +41,17 @@ export default function ScoreTimer({ color }: Readonly<{ color: PLAYERS }>) {
     if (turn !== color && isRunning && stateGame === STATES_GAME.PLAYING) {
       pause();
     }
-    if (turn === color && !isRunning  && stateGame === STATES_GAME.PLAYING) {
+    if (turn === color && !isRunning && stateGame === STATES_GAME.PLAYING) {
       resume();
     }
   }, [turn]);
 
   return (
     <div className="flex justify-between text-xl font-semibold my-4 bg-slate-800 text-white px-5 rounded-xl py-0.5 h-10 items-center w-full">
-      <span>SCORE - {PlayerScore?.toString().padStart(3,"0")}</span>
+      <div className="flex place-items-center">
+        <span className="border-r-2 pr-5 mr-5">SCORE</span>
+        <span>{PlayerScore?.toString()}</span>
+      </div>
       <div>
         <span>
           {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}
