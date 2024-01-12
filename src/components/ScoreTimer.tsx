@@ -10,7 +10,7 @@ export default function ScoreTimer({ color }: Readonly<{ color: PLAYERS }>) {
   const { getScore, setTime, turn, stateGame, setStateGame } = useGameStore() as any;
   const PlayerScore = getScore(color);
   const time = new Date();
-  time.setSeconds(time.getSeconds() + 30); //600//10 minutes timer
+  time.setSeconds(time.getSeconds() + 600); //600//10 minutes timer
   const {
     totalSeconds,
     seconds,
@@ -37,9 +37,7 @@ export default function ScoreTimer({ color }: Readonly<{ color: PLAYERS }>) {
   }, [totalSeconds]);
 
   useEffect(() => {
-    console.log(stateGame, turn, isRunning);
     if (turn === color && stateGame === STATES_GAME.NEW_GAME && !isRunning) {
-      console.log("Start");
       start();
       setStateGame(STATES_GAME.PLAYING);
     }
@@ -56,7 +54,7 @@ export default function ScoreTimer({ color }: Readonly<{ color: PLAYERS }>) {
 
   return (
     <div className="flex justify-between text-xl font-semibold my-4 bg-slate-800 text-white px-5 rounded-xl py-0.5 h-10 items-center w-full">
-      <span>SCORE - {PlayerScore?.toString()}</span>
+      <span>SCORE - {PlayerScore?.toString().padStart(3,"0")}</span>
       <div>
         <span>
           {String(minutes).padStart(2, "0")}:{String(seconds).padStart(2, "0")}

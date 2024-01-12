@@ -23,7 +23,7 @@ export default function Header() {
       <span className="text-3xl font-bold text-white">AJEDREZ</span>
       <button
         type="button"
-        className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 hover:scale-105"
+        className="py-2.5 px-5 text-sm font-medium text-gray-900 bg-white rounded-full border border-gray-200 hover:bg-gray-100 hover:text-blue-700 hover:scale-105 hover:font-semibold"
         onClick={handleClick}
       >
         {buttonActionName}

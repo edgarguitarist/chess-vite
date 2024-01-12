@@ -44,3 +44,118 @@ export const defaultSquare: Piece = {
   isMoved: false,
   defeatedAtTime: 0
 }
+
+export const createMoveSet = (piece:Piece) => {
+  const { name: pieceName, color: pieceColor, coords } = piece
+  if (pieceName === null || pieceColor === null) return null
+  switch (pieceName) {
+    case "bR":
+    case "wR":
+      return createRookMoveSet(coords)
+    case "bN":
+    case "wN":
+      return createKnightMoveSet(coords)
+    case "bB":
+    case "wB":
+      return createBishopMoveSet(coords)
+    case "bQ":
+    case "wQ":
+      return createQueenMoveSet(coords)
+    case "bK":
+    case "wK":
+      return createKingMoveSet(coords)
+    case "bP":
+    case "wP":
+      return createPawnMoveSet(pieceColor, coords)
+    default:
+      return null
+  }
+}
+
+const createRookMoveSet = (coords: number[]) => {
+  const moveSet  = <number[][]>[]
+  const [x, y] = coords
+  for (let i = 1; i < 8; i++) {
+    moveSet.push([x + i, y])
+    moveSet.push([x - i, y])
+    moveSet.push([x, y + i])
+    moveSet.push([x, y - i])
+  }
+  return moveSet
+}
+
+
+const createKnightMoveSet = (coords: number[]) => {
+  const moveSet  = <number[][]>[]
+  const [x, y] = coords
+  moveSet.push([x + 2, y + 1])
+  moveSet.push([x + 2, y - 1])
+  moveSet.push([x - 2, y + 1])
+  moveSet.push([x - 2, y - 1])
+  moveSet.push([x + 1, y + 2])
+  moveSet.push([x + 1, y - 2])
+  moveSet.push([x - 1, y + 2])
+  moveSet.push([x - 1, y - 2])
+  return moveSet
+}
+
+const createBishopMoveSet = (coords: number[]) => {
+  const moveSet  = <number[][]>[]
+  const [x, y] = coords
+  for (let i = 1; i < 8; i++) {
+    moveSet.push([x + i, y + i])
+    moveSet.push([x - i, y - i])
+    moveSet.push([x - i, y + i])
+    moveSet.push([x + i, y - i])
+  }
+  return moveSet
+}
+
+const createQueenMoveSet = (coords: number[]) => {
+  const moveSet  = <number[][]>[]
+  const [x, y] = coords
+  for (let i = 1; i < 8; i++) {
+    moveSet.push([x + i, y])
+    moveSet.push([x - i, y])
+    moveSet.push([x, y + i])
+    moveSet.push([x, y - i])
+    moveSet.push([x + i, y + i])
+    moveSet.push([x - i, y - i])
+    moveSet.push([x - i, y + i])
+    moveSet.push([x + i, y - i])
+  }
+  return moveSet
+}
+
+const createKingMoveSet = (coords: number[]) => {
+  const moveSet  = <number[][]>[]
+  const [x, y] = coords
+  moveSet.push([x + 1, y])
+  moveSet.push([x - 1, y])
+  moveSet.push([x, y + 1])
+  moveSet.push([x, y - 1])
+  moveSet.push([x + 1, y + 1])
+  moveSet.push([x - 1, y - 1])
+  moveSet.push([x - 1, y + 1])
+  moveSet.push([x + 1, y - 1])
+  return moveSet
+}
+
+const createPawnMoveSet = (pieceColor: PLAYERS, coords: number[]) => {
+  const moveSet  = <number[][]>[]
+  const [x, y] = coords
+  if (pieceColor === PLAYERS.WHITE) {
+    moveSet.push([x - 1, y])
+    moveSet.push([x - 2, y])
+    moveSet.push([x - 1, y + 1])
+    moveSet.push([x - 1, y - 1])
+  } else {
+    moveSet.push([x + 1, y])
+    moveSet.push([x + 2, y])
+    moveSet.push([x + 1, y + 1])
+    moveSet.push([x + 1, y - 1])
+  }
+  return moveSet
+}
+
+

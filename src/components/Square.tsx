@@ -1,6 +1,6 @@
 import { PIECES } from "../media/pieces";
 import { useGameStore } from "../store/GameStore";
-import { defaultSquare } from "../constants/global";
+import { createMoveSet, defaultSquare } from "../constants/global";
 import React from "react";
 import { Piece, PLAYERS } from "../types/Piece";
 import { toast } from "react-toastify";
@@ -60,6 +60,23 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
       ].join(" ")
     );
     setScore(selectedSquare?.color, 6);
+    return true;
+  };
+
+  const checkMoveSet = () => {
+    if (!selectedSquare?.moveSet) return false;
+    const moveSet = selectedSquare.moveSet;
+    const [row, col] = piece.coords;
+    const [rowSelected, colSelected] = selectedSquare.coords;
+    const isMoveSet = moveSet.some((move: any) => {
+      const [rowMove, colMove] = move;
+      return rowMove === row && colMove === col;
+    });
+    const isMoveSetSelected = moveSet.some((move: any) => {
+      const [rowMove, colMove] = move;
+      return rowMove === rowSelected && colMove === colSelected;
+    });
+    return isMoveSet || isMoveSetSelected;
   };
 
   const movePiece = () => {
@@ -71,9 +88,20 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     if (row < 1 || row > 8 || col < 1 || col > 8) return;
     if (piece?.color === turn && piece?.color !== undefined) return;
     let newBoard = [...board];
+
+    const attack = tryAttack();
+    console.log(attack, selectedSquare.isMoved, selectedSquare.name);
+    if((!attack || !selectedSquare.isMoved) && (selectedSquare.name === "bP" || selectedSquare.name === "wP")){
+       selectedSquare.moveSet.length = 2;
+    }
+    if (!checkMoveSet()) {
+      toast.error("Movimiento invalido ❌");
+      setScore(selectedSquare.color, -3);
+      return;
+    }
+
     newBoard[selectedSquare.coords[0]][selectedSquare.coords[1]] =
       defaultSquare;
-    tryAttack();
     selectedSquare.isMoved = true;
     newBoard[row][col] = selectedSquare;
     setBoard(newBoard);
@@ -106,7 +134,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
       ...piece,
       isSelected: true,
     };
-
+    currentSquare.moveSet =  createMoveSet(currentSquare);
     setSelectedSquare(isPiece ? currentSquare : defaultSquare);
   };
 
