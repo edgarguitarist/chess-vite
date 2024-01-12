@@ -91,7 +91,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
 
     const attack = tryAttack();
     console.log(attack, selectedSquare.isMoved, selectedSquare.name);
-    if((!attack || !selectedSquare.isMoved) && (selectedSquare.name === "bP" || selectedSquare.name === "wP")){
+    if((!attack) && (selectedSquare.name === "bP" || selectedSquare.name === "wP")){
        selectedSquare.moveSet.length = 2;
     }
     if (!checkMoveSet()) {
