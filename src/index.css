@@ -2,15 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-
-
 .cols-board {
-  grid-template-columns: 24px repeat(8, 48px);
-}
-.rows-board {
-  grid-template-rows: 24px repeat(8, 48px);
+  grid-template-columns: repeat(8, 48px);
 }
 
+.rows-board {
+  grid-template-rows: repeat(8, 48px);
+}
 
 .grid-max-content {
   grid-template-rows: max-content;
@@ -18,4 +16,12 @@
 
 .grid-piece-info {
   grid-template-columns: 73% 27%;
+}
+
+.grid-board {
+  display: grid;
+  grid-template-columns: 24px 384px;
+  grid-template-rows: 24px 384px;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
 }
