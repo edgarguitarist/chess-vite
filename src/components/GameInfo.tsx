@@ -2,6 +2,7 @@ import { useGameStore } from "../store/GameStore";
 import { PIECES } from "../media/pieces";
 import { PLAYERS } from "../types/Piece";
 import GameHistory from "./GameHistory";
+import React from "react";
 
 export default function GameInfo() {
   const { turn } = useGameStore();
