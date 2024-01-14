@@ -22,13 +22,20 @@ export enum GAME_ACTIONS {
     SAVE = "GUARDAR LA PARTIDA",
 }
 
+export interface ChessBoard {
+    map(arg0: (row: any, rowIndex: any) => import("react").JSX.Element): import("react").ReactNode;
+    length: number
+    [key: number]: Piece[];
+  }
+
 export interface InitialState {
-    board: any[][],
+    board: ChessBoard,
     [PLAYERS.WHITE]: Player,
     [PLAYERS.BLACK]: Player,
     selectedSquare: Piece | null,
     hoverSquare: Piece | null,
     turn: PLAYERS,
+    lastPieceMoved: Piece | null,
     history: any[],
     stateGame: STATES_GAME
 }
@@ -45,4 +52,5 @@ export interface GameStore extends InitialState {
     setHoverSquare: (hoverSquare: Piece | null) => void,
     changeTurn: () => void,
     setHistory: (history: any[]) => void,
+    setLastPieceMoved: (lastPieceMoved: Piece | null) => void,
 }
