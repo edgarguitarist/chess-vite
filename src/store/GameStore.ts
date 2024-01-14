@@ -18,6 +18,7 @@ const initialState: InitialState = {
     selectedSquare: defaultSquare,
     hoverSquare: defaultSquare,
     turn: PLAYERS.WHITE,
+    lastPieceMoved: null,
     history: [],
     stateGame: STATES_GAME.WAITING,
 };
@@ -51,5 +52,6 @@ export const useGameStore = create<GameStore>((set, get) => ({
     changeTurn: () => set((state) => ({
         turn: state.turn === PLAYERS.WHITE ? PLAYERS.BLACK : PLAYERS.WHITE,
     })),
+    setLastPieceMoved: (lastPieceMoved) => set({ lastPieceMoved }),
     setHistory: (newHistory) => set({ history: [newHistory, ...get().history] }),
 }));
