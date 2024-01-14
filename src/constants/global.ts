@@ -1,5 +1,5 @@
 import { PLAYERS, Piece } from "../types/Piece"
-import { ChessBoard } from "../types/global"
+import { ChessBoard } from "../types/Global"
 
 const createDefaultPiece = (color, name): Piece => {
   return {

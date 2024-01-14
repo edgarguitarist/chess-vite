@@ -2,7 +2,7 @@ import { toast } from "react-toastify";
 import { useGameStore } from "../store/GameStore.ts";
 
 import React, { useState } from "react";
-import { GAME_ACTIONS, STATES_GAME } from "../types/global.ts";
+import { GAME_ACTIONS, STATES_GAME } from "../types/Global.ts";
 
 export default function Header() {
   const { stateGame, setStateGame } = useGameStore();

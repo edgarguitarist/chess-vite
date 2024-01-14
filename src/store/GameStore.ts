@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import { defaultBoard, defaultSquare } from "../constants/global";
 import { PLAYERS } from "../types/Piece";
-import { GameStore, InitialState, STATES_GAME } from "../types/global";
+import { GameStore, InitialState, STATES_GAME } from "../types/Global";
 
 const initialState: InitialState = {
     board: defaultBoard,

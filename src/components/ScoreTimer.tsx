@@ -3,7 +3,7 @@ import { useGameStore } from "../store/GameStore";
 import { PLAYERS } from "../types/Piece";
 import { useTimer } from "react-timer-hook";
 import { celebrate } from "../utils/global";
-import { STATES_GAME } from "../types/global";
+import { STATES_GAME } from "../types/Global";
 import { toast } from "react-toastify";
 
 export default function ScoreTimer({ color }: Readonly<{ color: PLAYERS }>) {

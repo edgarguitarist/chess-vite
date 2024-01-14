@@ -5,7 +5,7 @@ import React from "react";
 import { Piece, PLAYERS } from "../types/Piece";
 import { toast } from "react-toastify";
 import { getPieceName, realCoords } from "../utils/global";
-import { STATES_GAME } from "../types/global";
+import { STATES_GAME } from "../types/Global";
 
 export default function Square({ piece }: Readonly<{ piece: Piece }>) {
   const [col, row] = piece.coords;
