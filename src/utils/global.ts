@@ -3,7 +3,7 @@ import confetti from "canvas-confetti";
 
 export function realCoords(coords: number[]) {
     const [x, y] = coords;
-    if (x < 0 || x > 7 || y < 0 || y > 7) return null;
+    if (x < 0 || x > 7 || y < 0 || y > 7) return 'N/A';
     const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
     const numbers = [8, 7, 6, 5, 4, 3, 2, 1];
     return `${letters[x]}${numbers[y]}`;

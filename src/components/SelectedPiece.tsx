@@ -28,9 +28,7 @@ export default function SelectedPiece() {
           </div>
           <div className="w-full flex items-center gap-4">
             Coordenadas:{" "}
-            {pieceShown.coords[0] === 0
-              ? "N/A"
-              : realCoords(pieceShown.coords)}
+            {realCoords(pieceShown.coords)}
           </div>
         </div>
         <div className="grid place-items-center scale-[1.75]">
