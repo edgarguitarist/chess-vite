@@ -2,9 +2,10 @@ import { Piece } from "../types/Piece";
 import confetti from "canvas-confetti";
 
 export function realCoords(coords: number[]) {
-    const [y, x] = coords;
-    const letters = ["", "A", "B", "C", "D", "E", "F", "G", "H"];
-    const numbers = [0, 8, 7, 6, 5, 4, 3, 2, 1];
+    const [x, y] = coords;
+    if (x < 0 || x > 7 || y < 0 || y > 7) return null;
+    const letters = ["A", "B", "C", "D", "E", "F", "G", "H"];
+    const numbers = [8, 7, 6, 5, 4, 3, 2, 1];
     return `${letters[x]}${numbers[y]}`;
 }
 
@@ -74,3 +75,5 @@ export function celebrate() {
         startVelocity: 45,
     });
 }
+
+
