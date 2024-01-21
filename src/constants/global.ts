@@ -1,12 +1,15 @@
 import { PLAYERS, Piece } from "../types/Piece"
 import { ChessBoard } from "../types/Global"
+//import el archivo audio
+
+export const defaultAudio = new Audio("/chess-vite/uu.mp3")
 
 const createDefaultPiece = (color, name): Piece => {
   return {
     name,
     color,
     coords: [9, 9],
-    moveSet: null,
+    moveSet: [],
     isMoved: false,
     defeatedAtTime: 0
   }
@@ -33,21 +36,21 @@ export const numbers = ["1", "2", "3", "4", "5", "6", "7", "8"].reverse()
 
 
 const bStrongs = [bR, bN, bB, bQ, bK, bB, bN, bR].map((piece, index) => {
-  piece.coords = [0, index]
-  return piece
+  piece.coords = [index, 0]
+  return { ...piece }
 })
 
 const bPawns = Array(8).fill(bP).map((piece, index) => {
-  piece.coords = [1, index]
-  return piece
+  piece.coords = [index, 1]
+  return { ...piece }
 })
 const wStrongs = [wR, wN, wB, wQ, wK, wB, wN, wR].map((piece, index) => {
-  piece.coords = [7, index]
-  return piece
+  piece.coords = [index, 7]
+  return { ...piece }
 })
 const wPawns = Array(8).fill(wP).map((piece, index) => {
-  piece.coords = [6, index]
-  return piece
+  piece.coords = [index, 6]
+  return { ...piece }
 })
 
 export const defaultBoard: ChessBoard = [
@@ -65,37 +68,12 @@ export const defaultSquare: Piece = {
   name: null,
   color: null,
   coords: [9, 9],
-  moveSet: null,
+  moveSet: [],
   isMoved: false,
   defeatedAtTime: 0
 }
 
-export const createMoveSet = (piece: Piece, tablero: ChessBoard, lastPieceMoved: Piece) => {
-  const { name: pieceName, color: pieceColor, coords } = piece
-  if (pieceName === null || pieceColor === null) return null
-  switch (pieceName) {
-    case "bR":
-    case "wR":
-      return createRookMoveSet(piece, tablero)
-    case "bN":
-    case "wN":
-      return createKnightMoveSet(piece, tablero)
-    case "bB":
-    case "wB":
-      return createBishopMoveSet(piece, tablero)
-    case "bQ":
-    case "wQ":
-      return createQueenMoveSet(piece, tablero)
-    case "bK":
-    case "wK":
-      return createKingMoveSet(piece, tablero)
-    case "bP":
-    case "wP":
-      return createPawnMoveSet(piece, tablero, lastPieceMoved)
-    default:
-      return null
-  }
-}
+
 
 function createKnightMoveSet(piece: Piece, tablero: ChessBoard): number[][] {
   const [y, x] = piece.coords;
@@ -142,7 +120,7 @@ function createPawnMoveSet(piece: Piece, tablero: ChessBoard, lastPieceMoved: an
 
   // Movimiento hacia adelante dos casillas en la primera jugada
   const forwardTwo = [x + 2 * direction, y];
-  if (!tablero[x][y]!.isMoved && isValidMove(forwardTwo, tablero, color, false)) {
+  if (!piece.isMoved && isValidMove(forwardTwo, tablero, color, false)) {
     moveSet.push(forwardTwo);
   }
 
@@ -159,13 +137,16 @@ function createPawnMoveSet(piece: Piece, tablero: ChessBoard, lastPieceMoved: an
   }
 
   // Captura al paso
-  const lastPieceMovedCoords = lastPieceMoved?.coords;
-  console.log({ lastPieceMovedCoords, x, y, distance: lastPieceMoved?.distance});
+  if (!lastPieceMoved) return moveSet
+  const { distance, name, coords: lastPieceMovedCoords } = lastPieceMoved
+  console.log(lastPieceMoved, [y, x]);
+  if (!distance || distance.length < 2) return moveSet
   if (
     lastPieceMoved &&
-    lastPieceMoved!.name!.includes('P') &&
-    lastPieceMoved.distance[1] === 2 &&
-    lastPieceMovedCoords[0] === y - 1 // La última pieza movida está a la izquierda
+    name!.includes('P') &&
+    distance[1] === 2 &&
+    lastPieceMovedCoords[0] === y - 1 && // La última pieza movida está a la izquierda
+    lastPieceMovedCoords[1] === x
   ) {
     const enPassantCaptureLeft = [x + direction, y - 1];
     moveSet.push(enPassantCaptureLeft);
@@ -173,9 +154,10 @@ function createPawnMoveSet(piece: Piece, tablero: ChessBoard, lastPieceMoved: an
 
   if (
     lastPieceMoved &&
-    lastPieceMoved!.name!.includes('P') &&
-    lastPieceMoved.distance[1] === 2 &&
-    lastPieceMovedCoords[0] === y + 1 // La última pieza movida está a la derecha
+    name!.includes('P') &&
+    distance[1] === 2 &&
+    lastPieceMovedCoords[0] === y + 1 && // La última pieza movida está a la derecha
+    lastPieceMovedCoords[1] === x
   ) {
     const enPassantCaptureRight = [x + direction, y + 1];
     moveSet.push(enPassantCaptureRight);
@@ -276,9 +258,76 @@ function createKingMoveSet(piece: Piece, tablero: ChessBoard): number[][] {
       }
     }
   }
-
   return moveSet;
 }
+
+const generateUnfilteredMoveSet = (piece: Piece, tablero: ChessBoard, lastPieceMoved: Piece | null): number[][] => {
+  switch (piece.name) {
+    case "bR":
+    case "wR":
+      return createRookMoveSet(piece, tablero);
+    case "bN":
+    case "wN":
+      return createKnightMoveSet(piece, tablero);
+    case "bB":
+    case "wB":
+      return createBishopMoveSet(piece, tablero);
+    case "bQ":
+    case "wQ":
+      return createQueenMoveSet(piece, tablero);
+    case "bK":
+    case "wK":
+      return createKingMoveSet(piece, tablero);
+    case "bP":
+    case "wP":
+      return createPawnMoveSet(piece, tablero, lastPieceMoved);
+    default:
+      return [];
+  }
+};
+
+const simulateMove = (tablero, piece: Piece, move: number[]): ChessBoard => {
+  const [fromX, fromY] = piece.coords;
+  const [toX, toY] = move;
+
+  // Crear una copia profunda del tablero usando JSON.stringify y JSON.parse
+  const newTablero = JSON.parse(JSON.stringify(tablero));
+
+  // Asignar la pieza movida a la nueva posición
+  newTablero[toX][toY] = newTablero[fromY][fromX];
+  
+  // Restablecer la casilla de origen con defaultSquare
+  newTablero[fromY][fromX] = null;
+
+  //console.log({ piece, move, newTablero });
+
+  return newTablero;
+};
+
+export const createMoveSet = (piece: Piece, tablero, lastPieceMoved: Piece | null): number[][] => {
+  const { name: pieceName, color: pieceColor } = piece;
+  if (pieceName === null || pieceColor === null) return [];
+
+  // No llamamos directamente a simulateMove aquí para evitar recursividad infinita
+  const moveSet = generateUnfilteredMoveSet(piece, tablero, lastPieceMoved);
+  
+  // Filtrar movimientos para evitar jaque
+  const filteredMoveSet = moveSet.filter((move) => {
+    const newTablero = JSON.parse(JSON.stringify(tablero));
+    const [toX, toY] = move;
+    const simulatedTablero = simulateMove(newTablero, piece, move);
+
+    // Asegúrate de que createMoveSet no se llame directamente aquí
+    const newPiece = simulatedTablero[toX][toY];
+    if (!newPiece) return false;    
+    return !isInCheck(newPiece.color, simulatedTablero);
+  });
+
+  //console.log({moveSet, filteredMoveSet})
+
+  return filteredMoveSet;
+};
+
 
 function isValidMove(coords: number[], tablero: ChessBoard, pieceColor: PLAYERS | null, allowCapture: boolean): boolean {
   const [x, y] = coords;
@@ -300,66 +349,37 @@ function isValidMove(coords: number[], tablero: ChessBoard, pieceColor: PLAYERS 
   return false; // Movimiento no válido si hay una pieza en la casilla de destino del mismo color o si no se permite la captura
 }
 
-
-// Función para detectar jaque
-const detectarJaque = (tablero: ChessBoard, jugador: PLAYERS) => {
-  // Encuentra la posición del rey del jugador actual
-  const reyPosicion = encontrarRey(tablero, jugador);
-
-  // Verifica si alguna pieza del oponente amenaza al rey
-  for (let fila = 0; fila < tablero.length; fila++) {
-    for (let columna = 0; columna < tablero[fila].length; columna++) {
-      const pieza = tablero[fila][columna];
-      if (pieza && pieza.color !== jugador) {
-        if (pieza.moveSet.some(movimiento => movimiento[0] === reyPosicion[0] && movimiento[1] === reyPosicion[1])) {
-          return true; // El rey está en jaque
+export const isInCheck = (playerColor: PLAYERS | null, tablero: ChessBoard): boolean => {
+  if (!playerColor) return false;
+  const king = findKing(playerColor, tablero);
+  //console.log(king);
+  if (!king) {
+    return false; // No se encontró el rey
+  }
+  // Verificar si alguna pieza del oponente tiene al rey en su lista de movimientos posibles
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+      const piece = tablero[row][col];
+      if (piece && piece.color !== playerColor) {
+        const moveSet = generateUnfilteredMoveSet(piece, tablero, null);
+        if (moveSet.some(([y, x]) => x === king!.coords[0] && y === king!.coords[1])) {
+          return true;
         }
       }
     }
   }
-
-  return false; // El rey no está en jaque
+  return false;
 };
 
-
-// Función para detectar jaque mate
-const detectarJaqueMate = (tablero: ChessBoard, jugador: PLAYERS) => {
-  // Si el rey no está en jaque, no hay jaque mate
-  if (!detectarJaque(tablero, jugador)) {
-    return false;
-  }
-
-  // Verifica si el rey puede escapar a algún lugar seguro
-  const reyPosicion = encontrarRey(tablero, jugador);
-  for (let i = -1; i <= 1; i++) {
-    for (let j = -1; j <= 1; j++) {
-      const nuevaFila = reyPosicion[0] + i;
-      const nuevaColumna = reyPosicion[1] + j;
-
-      // Verifica si la nueva posición es válida y no está amenazada
-      if (nuevaFila >= 0 && nuevaFila < tablero.length && nuevaColumna >= 0 && nuevaColumna < tablero[0].length) {
-        if (!detectarJaque(tablero, jugador) && tablero[nuevaFila][nuevaColumna] === null) {
-          return false; // El rey puede escapar
-        }
+// Función para encontrar la posición del rey de un jugador en el tablero
+const findKing = (playerColor: PLAYERS, tablero: ChessBoard): Piece | null => {
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+      const piece = tablero[row][col];
+      if (piece && piece?.name?.includes(`K`) && piece.color === playerColor) {
+        return {...piece, coords: [col, row]};
       }
     }
   }
-
-  // Si el rey no puede escapar, está en jaque mate
-  return true;
-};
-
-// Función para encontrar la posición del rey de un jugador
-const encontrarRey = (tablero: ChessBoard, jugador: PLAYERS) => {
-  for (let fila = 0; fila < tablero.length; fila++) {
-    for (let columna = 0; columna < tablero[fila].length; columna++) {
-      const pieza: Piece = tablero[fila][columna];
-      if (pieza && pieza.name?.includes('K') && pieza.color === jugador) {
-        return [fila, columna];
-      }
-    }
-  }
-
-  // En caso de no encontrar el rey, devolvemos una posición no válida (-1, -1)
-  return [-1, -1];
+  return null;
 };

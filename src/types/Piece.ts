@@ -7,7 +7,7 @@ export interface Piece {
     name: string | null;
     color: PLAYERS | null;
     coords: number[];
-    moveSet: any;
+    moveSet: number[][];
     isMoved: boolean;
     isSelected?: boolean;
     defeatedAtTime: number;

@@ -7,7 +7,14 @@ import { realCoords } from "../utils/global";
 import React from "react";
 
 export default function Board() {
-  const { board } = useGameStore();
+  const { board, selectedSquare } = useGameStore();
+
+  const getLightSquares = (coords):boolean => {
+    return selectedSquare?.moveSet.some((move) => {
+      return move[0] === coords[1] && move[1] === coords[0];
+    }) || false;
+  }
+
   return (
     <section className="flex flex-col justify-between my-2 items-center">
       <ScoreTimer color={PLAYERS.BLACK} />
@@ -32,6 +39,7 @@ export default function Board() {
                     <Square
                       key={realCoords([colIndex, rowIndex])}
                       piece={{ ...piece, coords: [colIndex, rowIndex] }}
+                      posibleMoveLight={getLightSquares([colIndex, rowIndex])}
                     />
                   );
                 })}

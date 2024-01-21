@@ -4,6 +4,7 @@ export interface Player {
     score: number,
     defeatedPieces: Piece[],
     time: number,
+    isInCheck: boolean,
 }
 
 export enum STATES_GAME {
@@ -25,7 +26,7 @@ export enum GAME_ACTIONS {
 export interface ChessBoard {
     map(arg0: (row: any, rowIndex: any) => import("react").JSX.Element): import("react").ReactNode;
     length: number
-    [key: number]: Piece[];
+    [key: number]: Array<Piece | null>;
   }
 
 export interface InitialState {
@@ -38,6 +39,8 @@ export interface InitialState {
     lastPieceMoved: Piece | null,
     history: any[],
     stateGame: STATES_GAME
+    colorLine: string,
+    soundDefeatedPiece: HTMLAudioElement,
 }
 
 export interface GameStore extends InitialState {
@@ -53,4 +56,6 @@ export interface GameStore extends InitialState {
     changeTurn: () => void,
     setHistory: (history: any[]) => void,
     setLastPieceMoved: (lastPieceMoved: Piece | null) => void,
+    setColorLine: (colorLine: string) => void,
+    setAudio: (audio: HTMLAudioElement) => void,
 }

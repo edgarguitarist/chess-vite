@@ -1,13 +1,13 @@
 import { PIECES } from "../media/pieces";
 import { useGameStore } from "../store/GameStore";
-import { createMoveSet, defaultSquare } from "../constants/global";
+import { createMoveSet, defaultSquare, isInCheck } from "../constants/global";
 import React from "react";
 import { Piece, PLAYERS } from "../types/Piece";
 import { toast } from "react-toastify";
 import { getPieceName, realCoords } from "../utils/global";
 import { STATES_GAME } from "../types/Global";
 
-export default function Square({ piece }: Readonly<{ piece: Piece }>) {
+export default function Square({ piece, posibleMoveLight }: Readonly<{ piece: Piece, posibleMoveLight: boolean }>) {
   const [col, row] = piece.coords;
 
   const {
@@ -24,13 +24,17 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     setHistory,
     lastPieceMoved,
     setLastPieceMoved,
-    stateGame
+    stateGame,
+    setInCheck,
+    soundDefeatedPiece
   }: any = useGameStore();
 
   const isPiece = !!piece.name;
 
+  const movesLight = posibleMoveLight ? "shadow-[inset_0px_1px_8px_4px_#4299e1]" : "";
+
   const hintLights =
-    col === selectedSquare.coords[0] && row === selectedSquare.coords[1]
+    col === selectedSquare.coords[0] && row === selectedSquare.coords[1] 
       ? "shadow-[inset_0px_1px_8px_4px_#4299e1]"
       : "";
 
@@ -42,10 +46,10 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
   const currentPiece = piece ? PIECES[piece.name] : null;
 
   const handleClick = () => {
-    if (stateGame !== STATES_GAME.PLAYING) {
-      toast.error("El juego no ha iniciado");
-      return;
-    }
+    // if (stateGame !== STATES_GAME.PLAYING) {
+    //   toast.error("El juego no ha iniciado");
+    //   return;
+    // }
     if (!isPiece && !selectedSquare.isSelected) return;
     delete piece.isSelected;
     if (movePiece()) return;
@@ -57,6 +61,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     currentSquare.moveSet = createMoveSet(currentSquare, board, lastPieceMoved);
     setSelectedSquare(isPiece ? currentSquare : defaultSquare);
   };
+  const lastCoords = [...selectedSquare.coords];
 
   const movePiece = () => {
     if (!selectedSquare?.name) return;
@@ -66,6 +71,8 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     }
     if (row < 0 || row > 7 || col < 0 || col > 7) return;
     if (piece?.color === turn && piece?.color !== undefined) return;
+    //retornar si la pieza es el rey
+    //console.log(piece);
     let newBoard = [...board];
 
     if (!checkMoveSet()) {
@@ -78,14 +85,15 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
 
     newBoard[selectedSquare.coords[1]][selectedSquare.coords[0]] = null;
     selectedSquare.isMoved = true;
+    selectedSquare.coords = [col, row];
     newBoard[row][col] = selectedSquare;
 
-
     const enPassantCapture = checkEnPassantCapture();
+    console.log(enPassantCapture);
     if (enPassantCapture) {
       const [col, row] = enPassantCapture;
       newBoard[row][col] = null;
-      tryAttack(lastPieceMoved)
+      tryAttack(lastPieceMoved);
     }
 
     setBoard(newBoard);
@@ -96,29 +104,43 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
       selectedSquare
     )} de las ${selectedSquare.color} se movio a ${realCoords([col, row])}`;
     setHistory(moveHistoryMessage);
+    //console.log([col, row], lastCoords);
     setLastPieceMoved({
       ...selectedSquare,
       coords: [col, row],
       distance: [
-        Math.abs(col - selectedSquare.coords[0]),
-        Math.abs(row - selectedSquare.coords[1]),
+        Math.abs(col - lastCoords[0]), //x
+        Math.abs(row - lastCoords[1]), //y
       ],
     });
+
     changeTurn();
+    //actualizar el jugador que esta en jaque
+    
+    [PLAYERS.WHITE, PLAYERS.BLACK].forEach((player) => {
+      const colorEnemy = player === PLAYERS.WHITE ? PLAYERS.BLACK : PLAYERS.WHITE;
+      if (isInCheck(colorEnemy, [...newBoard])) {
+        toast.success(`+3 PUNTOS - EL REY DE LAS ${colorEnemy} ESTA EN JAQUE`);
+        setInCheck(colorEnemy);
+        setScore(player, 3);
+      }
+    });//*/
+
     return true;
   };
 
   const checkEnPassantCapture = () => {
     const { name, coords } = selectedSquare;
-    if (name.includes('P') && lastPieceMoved?.name!.includes('P')) {
+    if (name.includes("P") && lastPieceMoved?.name!.includes("P")) {
       const lastPieceCoords = lastPieceMoved.coords;
-      const deltaX = Math.abs(coords[0] - lastPieceCoords[0]);
-  
-      if (deltaX === 1 && lastPieceMoved.distance[1] === 2) {
+      const deltaX = Math.abs(lastCoords[0] - lastPieceCoords[0]);
+      const deltaY = Math.abs(lastCoords[1] - lastPieceCoords[1]);
+      console.log({ deltaX, deltaY, distance: lastPieceMoved.distance });
+      if (deltaX === 1 && deltaY === 0 && lastPieceMoved.distance[1] === 2) {
         return lastPieceCoords;
       }
     }
-  
+
     return null;
   };
 
@@ -132,6 +154,10 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
     } else {
       return;
     }
+    console.log(soundDefeatedPiece);
+    soundDefeatedPiece.currentTime = 0;
+    soundDefeatedPiece.volume = 1;
+    soundDefeatedPiece.play();
     toast.success(
       `+6 PUNTOS - La pieza ${getPieceName(
         piece
@@ -168,6 +194,7 @@ export default function Square({ piece }: Readonly<{ piece: Piece }>) {
       className={[
         defaultStyle,
         colorSquare,
+        movesLight,
         hintLights,
         defaultSize,
         defaultHover,
