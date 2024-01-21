@@ -4,7 +4,7 @@ import { useGameStore } from "../store/GameStore";
 export default function GameHistory() {
   const { history } = useGameStore() as any;
   return (
-    <div className="text-2xl font-semibold border-2 rounded border-black overflow-y-scroll h-[70vh]">
+    <div className="text-2xl font-semibold border-2 rounded border-black overflow-y-scroll h-[40vh]">
       <ul className="w-full text-sm font-medium ">
         {!history.length && (
           <li className="w-full text-center px-4 py-2 bg-gray-200 text-lg">
