@@ -1,4 +1,4 @@
-import { Piece } from "../types/Piece";
+import { PLAYERS, Piece } from "../types/Piece";
 import confetti from "canvas-confetti";
 
 export function realCoords(coords: number[]) {
@@ -40,40 +40,76 @@ export function getTimeString(time: number) {
 
 
 export function celebrate() {
-    var count = 200;
-    var defaults = {
-        origin: { y: 0.7 }
-    };
+    var duration = 20 * 1000;
+    var animationEnd = Date.now() + duration;
+    var defaults = { startVelocity: 30, spread: 360, ticks: 60, zIndex: 0 };
 
-    function fire(particleRatio, opts) {
-        confetti({
-            ...defaults,
-            ...opts,
-            particleCount: Math.floor(count * particleRatio)
-        });
+    function randomInRange(min, max) {
+        return Math.random() * (max - min) + min;
     }
-    fire(0.25, {
-        spread: 26,
-        startVelocity: 55,
-    });
-    fire(0.2, {
-        spread: 60,
-    });
-    fire(0.35, {
-        spread: 100,
-        decay: 0.91,
-        scalar: 0.8
-    });
-    fire(0.1, {
-        spread: 120,
-        startVelocity: 25,
-        decay: 0.92,
-        scalar: 1.2
-    });
-    fire(0.1, {
-        spread: 120,
-        startVelocity: 45,
-    });
+
+    const audio = new Audio("/chess-vite/fireworks.mp3");
+    audio.play();
+    //cuando finale el audio volver a reproducirlo
+    let counter = 0;
+    audio.onended = () => {
+        counter++;
+        if (counter < 2) audio.play();
+    }
+
+
+    var interval = setInterval(function () {
+
+        var timeLeft = animationEnd - Date.now();
+
+        if (timeLeft <= 0) {
+            return clearInterval(interval);
+        }
+
+        var particleCount = 50 * (timeLeft / duration);
+        // since particles fall down, start a bit higher than random
+        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.1, 0.3), y: Math.random() - 0.2 } });
+        confetti({ ...defaults, particleCount, origin: { x: randomInRange(0.7, 0.9), y: Math.random() - 0.2 } });
+    }, 250);
 }
 
 
+export const generateRandomComments = (name, color, coords, time, defeatedPiece) => {
+    const colorEnemy = color === PLAYERS.WHITE ? PLAYERS.BLACK : PLAYERS.WHITE;
+    let comments: string[] = [];
+    if (defeatedPiece && defeatedPiece.name) {
+        let { name:defeatedName, coords:defeatedCoords } = defeatedPiece;
+        defeatedName = getPieceName(defeatedPiece, true);
+        defeatedCoords = realCoords(defeatedCoords);
+        const AttackComments = [
+            `Wow... ${name} de las ${color} ha derrotado a ${defeatedName} de las ${colorEnemy} en ${defeatedCoords}`,
+            `¡Qué jugada! ${name} ha destrozado a ${defeatedName} en ${defeatedCoords}`,
+            `Solo han pasado ${time} segundos y ${name} ha acabado con ${defeatedName} en ${defeatedCoords}`,
+            `Que jugada tan buena de ${name} de las ${color} que ha acabado con ${defeatedName} en ${defeatedCoords}`,
+            `¡${name} ha fulminado con ${defeatedName} en ${defeatedCoords}!`,
+            `No me lo puedo creer, ${name} ha mandado a dormir a ${defeatedName} en ${defeatedCoords}`,
+            `Que posicion mas peligrosas para ${defeatedName} en ${defeatedCoords}, ${name} ha hecho una masacre`,
+        ];
+        comments = [...AttackComments];
+    } else {
+        const NormalComments = [
+            `¡Qué jugada! ${name} de las ${color} se ha movido a ${coords} en ${time} segundos`,
+            `Que jugada tan buena de ${name} de las ${color} que se ha movido a ${coords} en ${time} segundos`,
+            `¡${name} ha movido a ${coords}! ¡Que jugada!`,
+            `No me lo puedo creer, ${name} ha movido a ${coords} en ${time} segundos`,
+            `Que jugada mas rara de ${name} de las ${color} que se ha movido a ${coords}`,
+            `Que ingenio, no esperarba ese movimiento de ${name} de las ${color} que se ha movido a ${coords}`,
+            `Que posicion mas peligrosas para ${name} en ${coords}`,	
+            `${name} de las ${color} deberia tener cuidado`,
+            `Esa Jugada de ${name} de las ${color} creo deberia habersela pensado un poco más`,
+            `Uy uy uy, ${name} de las ${color} se ha movido a ${coords} en ${time} segundos`,
+            `Esa jugada de ${name} de las ${color} no me ha gustado nada`,
+        ];
+        comments = [...NormalComments];
+    }
+
+
+    return comments[Math.floor(Math.random() * comments.length)];
+
+
+}
