@@ -139,7 +139,6 @@ function createPawnMoveSet(piece: Piece, tablero: ChessBoard, lastPieceMoved: an
   // Captura al paso
   if (!lastPieceMoved) return moveSet
   const { distance, name, coords: lastPieceMovedCoords } = lastPieceMoved
-  console.log(lastPieceMoved, [y, x]);
   if (!distance || distance.length < 2) return moveSet
   if (
     lastPieceMoved &&
@@ -299,7 +298,6 @@ const simulateMove = (tablero, piece: Piece, move: number[]): ChessBoard => {
   // Restablecer la casilla de origen con defaultSquare
   newTablero[fromY][fromX] = null;
 
-  //console.log({ piece, move, newTablero });
 
   return newTablero;
 };
@@ -323,7 +321,6 @@ export const createMoveSet = (piece: Piece, tablero, lastPieceMoved: Piece | nul
     return !isInCheck(newPiece.color, simulatedTablero);
   });
 
-  //console.log({moveSet, filteredMoveSet})
 
   return filteredMoveSet;
 };
@@ -352,7 +349,6 @@ function isValidMove(coords: number[], tablero: ChessBoard, pieceColor: PLAYERS 
 export const isInCheck = (playerColor: PLAYERS | null, tablero: ChessBoard): boolean => {
   if (!playerColor) return false;
   const king = findKing(playerColor, tablero);
-  //console.log(king);
   if (!king) {
     return false; // No se encontró el rey
   }
@@ -383,3 +379,30 @@ const findKing = (playerColor: PLAYERS, tablero: ChessBoard): Piece | null => {
   }
   return null;
 };
+
+export const isCheckmate = (playerColor: PLAYERS | null, tablero: ChessBoard): boolean => {
+  //revisar si todas las piezas del jugador no puedan realizar movimientos
+  if (!playerColor) return false;
+  const king = findKing(playerColor, tablero);
+  if (!king) {
+    return false; // No se encontró el rey
+  }
+  //recorrer el tablero y verificar que todas las piezas del jugador no puedan realizar movimientos
+  //si es así, entonces es jaque mate
+  let count = 0;
+
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+
+      const piece = tablero[row][col];
+      if (piece && piece.color === playerColor) {
+        const moveSet = createMoveSet(piece, tablero, null);
+        if (moveSet.length > 0) {
+          count++;
+        }
+      }
+    }
+  }
+  return count === 0;
+};
+
