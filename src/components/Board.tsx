@@ -20,9 +20,7 @@ export default function Board() {
   };
 
   const handleCanvasRemoval = () => {
-    document.body
-      .querySelectorAll("canvas")
-      .forEach((canvas) => canvas.remove());
+    document.getElementById("linea")?.remove();
   };
 
   useEffect(() => {
@@ -32,7 +30,7 @@ export default function Board() {
       setClickedElementState(null);
       setTimeout(() => {
         handleCanvasRemoval()
-      }, 2000);
+      }, 1000);
     }
   }, [selectedElement, clickedElementState]);
 
@@ -75,6 +73,7 @@ export default function Board() {
     const y2 = rect2.top + rect2.height / 2;
 
     const canvas = document.createElement("canvas");
+    canvas.id = "linea";
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 
