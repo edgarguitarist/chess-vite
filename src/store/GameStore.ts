@@ -9,13 +9,13 @@ const initialState: InitialState = {
     [PLAYERS.BLACK]: {
         defeatedPieces: [],
         score: 0,
-        time: 10,
+        time: 600,
         isInCheck: false,
     },
     [PLAYERS.WHITE]: {
         defeatedPieces: [],
         score: 0,
-        time: 10,
+        time: 600,
         isInCheck: false,
     },
     selectedSquare: defaultSquare,
@@ -30,6 +30,7 @@ const initialState: InitialState = {
 
 export const useGameStore = create<GameStore>((set, get) => ({
     ...initialState,
+    setGlobalState: (newState) => set({ ...newState }),
     setBoard: (board) => set({ board }),
     setStateGame: (stateGame) => set({ stateGame }),
     setDefeatedPieces: (color, newDefeatedPiece) => set((state) => ({

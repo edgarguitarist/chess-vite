@@ -48,7 +48,7 @@ export function celebrate() {
         return Math.random() * (max - min) + min;
     }
 
-    const audio = new Audio("/chess-vite/fireworks.mp3");
+    const audio = new Audio("/chess-vite/audio/fireworks.mp3");
     audio.play();
     //cuando finale el audio volver a reproducirlo
     let counter = 0;
@@ -73,6 +73,11 @@ export function celebrate() {
     }, 250);
 }
 
+const convertSecondsToMinutesAndSeconds = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const secondsLeft = seconds % 60;
+    return `${minutes}:${secondsLeft}`;
+}
 
 export const generateRandomComments = (name, color, coords, time, defeatedPiece) => {
     const colorEnemy = color === PLAYERS.WHITE ? PLAYERS.BLACK : PLAYERS.WHITE;
@@ -84,7 +89,7 @@ export const generateRandomComments = (name, color, coords, time, defeatedPiece)
         const AttackComments = [
             `Wow... ${name} de las ${color} ha derrotado a ${defeatedName} de las ${colorEnemy} en ${defeatedCoords}`,
             `¡Qué jugada! ${name} ha destrozado a ${defeatedName} en ${defeatedCoords}`,
-            `Solo han pasado ${time} segundos y ${name} ha acabado con ${defeatedName} en ${defeatedCoords}`,
+            `Quedan ${convertSecondsToMinutesAndSeconds(time)} segundos y ${name} ha acabado con ${defeatedName} en ${defeatedCoords}`,
             `Que jugada tan buena de ${name} de las ${color} que ha acabado con ${defeatedName} en ${defeatedCoords}`,
             `¡${name} ha fulminado con ${defeatedName} en ${defeatedCoords}!`,
             `No me lo puedo creer, ${name} ha mandado a dormir a ${defeatedName} en ${defeatedCoords}`,
@@ -93,16 +98,16 @@ export const generateRandomComments = (name, color, coords, time, defeatedPiece)
         comments = [...AttackComments];
     } else {
         const NormalComments = [
-            `¡Qué jugada! ${name} de las ${color} se ha movido a ${coords} en ${time} segundos`,
-            `Que jugada tan buena de ${name} de las ${color} que se ha movido a ${coords} en ${time} segundos`,
+            `¡Qué jugada! ${name} de las ${color} se ha movido a ${coords} con ${convertSecondsToMinutesAndSeconds(time)} segundos restantes`,
+            `Que jugada tan buena de ${name} de las ${color} que se ha movido a ${coords} con ${convertSecondsToMinutesAndSeconds(time)} segundos restantes`,
             `¡${name} ha movido a ${coords}! ¡Que jugada!`,
-            `No me lo puedo creer, ${name} ha movido a ${coords} en ${time} segundos`,
+            `No me lo puedo creer, ${name} ha movido a ${coords} con ${convertSecondsToMinutesAndSeconds(time)} segundos restantes`,
             `Que jugada mas rara de ${name} de las ${color} que se ha movido a ${coords}`,
             `Que ingenio, no esperarba ese movimiento de ${name} de las ${color} que se ha movido a ${coords}`,
             `Que posicion mas peligrosas para ${name} en ${coords}`,	
             `${name} de las ${color} deberia tener cuidado`,
             `Esa Jugada de ${name} de las ${color} creo deberia habersela pensado un poco más`,
-            `Uy uy uy, ${name} de las ${color} se ha movido a ${coords} en ${time} segundos`,
+            `Uy uy uy, ${name} de las ${color} se ha movido a ${coords} con ${convertSecondsToMinutesAndSeconds(time)} segundos restantes`,
             `Esa jugada de ${name} de las ${color} no me ha gustado nada`,
         ];
         comments = [...NormalComments];

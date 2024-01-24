@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useGameStore } from "../store/GameStore";
 import { PLAYERS } from "../types/Piece";
 import { useTimer } from "react-timer-hook";
@@ -7,15 +7,26 @@ import { STATES_GAME } from "../types/Global";
 import { toast } from "react-toastify";
 
 export default function ScoreTimer({ color }: Readonly<{ color: PLAYERS }>) {
-  const { getScore, setTime, turn, stateGame, setStateGame } =
+  const { getScore, setTime, turn, stateGame, setStateGame, [color]:CurrentColor } =
     useGameStore() as any;
+
   const PlayerScore = getScore(color);
+
+  const [currentTime, setCurrentTime] = useState(CurrentColor.time);
+
+  // Actualizar currentTime cuando cambie BLANCAS o NEGRAS
+  useEffect(() => {
+    setCurrentTime(CurrentColor.time);
+  }, [CurrentColor, color]);
+
   const time = new Date();
-  time.setSeconds(time.getSeconds() + 600); //600//10 minutes timer
+  time.setSeconds(time.getSeconds() + currentTime);
+
   const { totalSeconds, seconds, minutes, start, pause, resume, isRunning } =
     useTimer({
       expiryTimestamp: time,
       onExpire: () => {
+        setStateGame(STATES_GAME.FINISHED);
         celebrate();
         console.info("Tiempo Terminado");
       },

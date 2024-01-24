@@ -2,7 +2,7 @@ import { PLAYERS, Piece } from "../types/Piece"
 import { ChessBoard } from "../types/Global"
 //import el archivo audio
 
-export const defaultAudio = new Audio("/chess-vite/uu.mp3")
+export const defaultAudio = new Audio("/chess-vite/audio/golpe_de_coco.mp3")
 
 const createDefaultPiece = (color, name): Piece => {
   return {

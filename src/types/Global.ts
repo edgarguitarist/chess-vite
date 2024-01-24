@@ -15,6 +15,7 @@ export enum STATES_GAME {
     CHECKMATE = "CHECKMATE",
     STALEMATE = "STALEMATE",
     DRAW = "DRAW",
+    FINISHED = "FINISHED",
 }
 
 export enum GAME_ACTIONS {
@@ -44,6 +45,7 @@ export interface InitialState {
 }
 
 export interface GameStore extends InitialState {
+    setGlobalState: (newState: InitialState) => void,
     setBoard: (board: any[][]) => void,
     setStateGame: (stateGame: STATES_GAME) => void,
     setDefeatedPieces: (color: PLAYERS, newDefeatedPieces: Piece) => void,
